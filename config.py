@@ -1,10 +1,11 @@
-"""Central configuration: paths, variable metadata and Open-Meteo settings shared by ETL, EDA and backend."""
+"""Central configuration: paths, variable metadata and Open-Meteo settings shared by ETL, EDA and the Streamlit app."""
 import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
 # Load secrets from a local .env file if python-dotenv is installed (never commit .env).
+# On Streamlit Community Cloud, put OPEN_METEO_API_KEY in the app's Secrets instead (optional).
 try:
     from dotenv import load_dotenv
 
@@ -19,13 +20,9 @@ REJECTED_PATH = BASE_DIR / "data" / "processed" / "rejected_records.csv"
 DB_PATH = BASE_DIR / "data" / "processed" / "air_quality.db"
 DB_TABLE = "air_quality"
 ETL_REPORT_PATH = BASE_DIR / "reports" / "etl_report.json"
-EDA_REPORT_PATH = BASE_DIR / "reports" / "eda_report.html"
-FRONTEND_DIR = BASE_DIR / "frontend"
 
 # ---------------------------------------------------------------- Open-Meteo
 # The FREE (non-commercial) tier needs NO API key: leave OPEN_METEO_API_KEY empty.
-# A key is only issued with a paid commercial subscription (https://open-meteo.com/en/pricing).
-# One key works for both the Weather and the Air Quality APIs.
 OPEN_METEO_API_KEY = os.getenv("OPEN_METEO_API_KEY", "").strip()
 _HOST_PREFIX = "customer-" if OPEN_METEO_API_KEY else ""  # paid keys use the customer-* servers
 OPEN_METEO_WEATHER_URL = f"https://{_HOST_PREFIX}api.open-meteo.com/v1/forecast"
