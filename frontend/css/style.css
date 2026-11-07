@@ -1,0 +1,212 @@
+/* Pakistan Air Quality and Weather — dark dashboard theme
+   Charcoal background, slightly lighter panels with thin borders, cyan as the single accent.
+   AQI category colours (green to maroon) come from script.js and stay the only other hues. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  color-scheme: dark; /* dark native dropdowns, date pickers and scrollbars */
+
+  /* surfaces and ink */
+  --bg: #14171b;
+  --card: #1c2026;
+  --card-2: #232830;
+  --ink: #e7ebef;
+  --muted: #8c97a4;
+  --line: #2b323a;
+  --line-strong: #3a424c;
+
+  /* brand */
+  --primary: #22b8f0;
+  --primary-dark: #0ea0d8;
+  --on-primary: #06222e;
+  --accent: #2dd4bf;
+  --focus: rgba(34, 184, 240, .45);
+
+  /* AQI categories (match CAT_COLORS in script.js) */
+  --good: #2ecc8f; --mod: #f5c542; --usg: #f28c28; --bad: #ef5350; --vbad: #b36ae2; --haz: #c2415d;
+
+  --radius: 10px;
+  --radius-sm: 7px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+  font-size: 14.5px; line-height: 1.55; -webkit-font-smoothing: antialiased;
+  scrollbar-color: var(--line-strong) var(--bg);
+}
+h1, h2, h3, p { margin: 0; }
+a { color: var(--primary); text-underline-offset: 2px; }
+a:hover { color: #7dd8f8; }
+code { font-family: Consolas, "Cascadia Mono", monospace; font-size: .9em; background: var(--card-2); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+/* ------------------------------------------------------------ header */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+  padding: 12px 28px; background: #101317; color: var(--ink);
+  position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--line);
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo {
+  width: 38px; height: 38px; border-radius: var(--radius-sm); display: grid; place-items: center;
+  background: var(--primary); color: var(--on-primary); font-weight: 700; font-size: 14px; letter-spacing: .02em;
+}
+.brand h1 { font-size: 17px; font-weight: 600; line-height: 1.25; }
+.brand p { font-size: 12.5px; color: var(--muted); }
+
+nav { display: flex; gap: 2px; flex-wrap: wrap; }
+nav a {
+  color: var(--muted); text-decoration: none; padding: 8px 14px; border-radius: var(--radius-sm);
+  font-size: 14px; font-weight: 500; transition: background-color .15s, color .15s;
+}
+nav a:hover { background: var(--card-2); color: var(--ink); }
+nav a.active { background: rgba(34, 184, 240, .14); color: var(--primary); font-weight: 600; }
+.menu-btn {
+  display: none; background: var(--card-2); border: 1px solid var(--line-strong); color: var(--ink); font-size: 20px;
+  border-radius: var(--radius-sm); padding: 4px 12px; cursor: pointer;
+}
+
+/* ------------------------------------------------------------ filters */
+.filters {
+  display: flex; flex-wrap: wrap; gap: 14px; align-items: end; padding: 14px 28px;
+  background: #171b20; border-bottom: 1px solid var(--line);
+}
+.filters.inline { padding: 0 0 14px; background: transparent; border: 0; }
+.filters label { display: flex; flex-direction: column; font-size: 12.5px; font-weight: 500; color: var(--muted); gap: 4px; }
+
+select, input {
+  height: 36px; padding: 0 10px; min-width: 120px; border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  background: #14171b; color: var(--ink); font: inherit; font-size: 14px;
+  transition: border-color .15s, box-shadow .15s;
+}
+select:hover, input:hover { border-color: #55606c; }
+select:focus, input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--focus); }
+input::placeholder { color: #6b7684; }
+input[type="checkbox"] { height: auto; min-width: 0; accent-color: var(--primary); }
+
+.btn {
+  height: 36px; padding: 0 16px; border-radius: var(--radius-sm); border: 1px solid var(--primary);
+  background: var(--primary); color: var(--on-primary); cursor: pointer; font: inherit; font-size: 14px; font-weight: 600;
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+  transition: background-color .15s, border-color .15s;
+}
+.btn:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: var(--on-primary); }
+.btn.ghost { background: transparent; color: var(--primary); border-color: var(--line-strong); font-weight: 500; }
+.btn.ghost:hover { background: rgba(34, 184, 240, .1); border-color: var(--primary); color: var(--primary); }
+.btn.small { height: 28px; font-size: 12.5px; padding: 0 10px; margin-left: 10px; vertical-align: middle; }
+.btn:disabled { opacity: .4; cursor: default; pointer-events: none; }
+
+/* ------------------------------------------------------------ layout */
+main { padding: 24px 28px 40px; max-width: 1480px; margin: auto; }
+.page { display: none; }
+.page.active { display: block; }
+.title { font-size: 21px; font-weight: 600; margin-bottom: 18px; color: var(--ink); letter-spacing: -.01em; }
+
+/* summary cards: the coloured left edge carries the AQI category (colour set inline by script.js) */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 18px; }
+.card {
+  background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--primary);
+  border-radius: var(--radius); padding: 14px 16px;
+}
+.card small { display: block; color: var(--muted); font-size: 13px; font-weight: 500; }
+.card b { display: block; font-size: 28px; font-weight: 700; line-height: 1.15; margin-top: 4px; color: #fff; font-variant-numeric: tabular-nums; }
+.card span { display: block; font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+/* panels */
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 18px 18px; min-width: 0; }
+.panel.wide { grid-column: 1 / -1; }
+.panel h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 14px; color: var(--ink); line-height: 1.35; }
+.panel canvas { max-width: 100%; }
+.note { font-size: 13px; color: var(--muted); margin-top: 8px; max-width: 80ch; }
+.scroll { overflow-x: auto; }
+
+/* ------------------------------------------------------------ tables */
+.tbl, .kv { border-collapse: collapse; width: 100%; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.tbl th, .tbl td { padding: 8px 12px; border-bottom: 1px solid var(--line); text-align: right; white-space: nowrap; }
+.tbl th:first-child, .tbl td:first-child { text-align: left; }
+.tbl th {
+  background: var(--card-2); color: var(--muted); font-size: 12.5px; font-weight: 600;
+  border-bottom: 1px solid var(--line-strong); position: sticky; top: 0;
+}
+.tbl.sortable th { cursor: pointer; user-select: none; }
+.tbl.sortable th:hover { color: var(--primary); }
+.tbl tbody tr:hover { background: #232a33; }
+.tbl tbody tr:last-child td { border-bottom: 0; }
+.kv td { padding: 9px 4px; border-bottom: 1px solid var(--line); }
+.kv tr:last-child td { border-bottom: 0; }
+.kv td:first-child { color: var(--muted); }
+.kv td:last-child { text-align: right; font-weight: 600; color: #fff; }
+
+/* ------------------------------------------------------------ badges, chips, lists */
+.badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; color: #fff; line-height: 1.5; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { background: var(--card-2); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 7px 12px; font-size: 13px; color: var(--muted); }
+.chip b { color: #fff; font-weight: 600; }
+.log { margin: 0; padding-left: 20px; font-size: 14px; line-height: 1.65; max-width: 100ch; color: #c9d1d9; }
+.log li + li { margin-top: 2px; }
+.prose h3 { margin: 18px 0 0; font-size: 15px; color: #fff; }
+.prose h3:first-child { margin-top: 0; }
+.prose p { line-height: 1.65; margin-top: 4px; max-width: 76ch; color: #c9d1d9; }
+
+/* ------------------------------------------------------------ ETL flow and progress bars */
+.etl-flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.step { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--primary); border-radius: var(--radius); padding: 14px 16px; }
+.step small { display: block; color: var(--muted); font-size: 13px; font-weight: 500; }
+.step b { display: block; font-size: 20px; font-weight: 700; margin-top: 2px; color: #fff; font-variant-numeric: tabular-nums; }
+.bar { margin-bottom: 14px; font-size: 13.5px; }
+.bar b { font-weight: 600; color: #fff; }
+.bar .track { height: 8px; background: var(--card-2); border-radius: 999px; margin-top: 6px; overflow: hidden; }
+.bar .fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); border-radius: 999px; }
+
+/* ------------------------------------------------------------ correlation heatmap */
+.heatmap { display: grid; gap: 2px; overflow-x: auto; font-size: 11.5px; font-variant-numeric: tabular-nums; }
+.heatmap div { padding: 8px 2px; text-align: center; min-width: 46px; border-radius: 3px; }
+/* script.js sets a dark inline text colour on weak cells; force light text on the dark theme */
+.heatmap div:not(.hl):not(.ht) { color: #e7ebef !important; }
+.heatmap .hl { background: transparent; font-weight: 600; color: var(--muted); text-align: right; padding-right: 8px; white-space: nowrap; }
+.heatmap .ht { background: transparent; font-weight: 600; color: var(--muted); }
+
+/* ------------------------------------------------------------ data table tools */
+.table-tools { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; align-items: center; }
+.table-tools input { flex: 1; min-width: 220px; }
+.cols { position: relative; }
+.cols summary {
+  height: 36px; display: inline-flex; align-items: center; padding: 0 14px; cursor: pointer; list-style: none;
+  border: 1px solid var(--line-strong); border-radius: var(--radius-sm); background: #14171b; font-size: 14px; font-weight: 500; color: var(--ink);
+}
+.cols summary::-webkit-details-marker { display: none; }
+.cols summary:hover { border-color: #55606c; }
+.cols[open] summary { border-color: var(--primary); }
+#colPicker {
+  position: absolute; right: 0; top: 42px; z-index: 5; background: var(--card-2); border: 1px solid var(--line-strong);
+  border-radius: var(--radius); padding: 10px 12px; width: 230px; max-height: 300px; overflow: auto;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .45);
+}
+#colPicker label { display: flex; align-items: center; gap: 8px; font-size: 13.5px; padding: 3px 0; cursor: pointer; }
+.pager { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+footer { text-align: center; padding: 22px 16px 26px; font-size: 13px; color: var(--muted); line-height: 1.7; background: #101317; border-top: 1px solid var(--line); margin-top: 8px; }
+.empty { color: var(--muted); padding: 24px; text-align: center; }
+
+/* ------------------------------------------------------------ responsive */
+@media (max-width: 900px) {
+  .grid, .etl-flow { grid-template-columns: 1fr; }
+  .menu-btn { display: block; }
+  nav { display: none; width: 100%; flex-direction: column; }
+  nav.open { display: flex; }
+  .topbar, .filters, main { padding-left: 16px; padding-right: 16px; }
+}
+@media (max-width: 560px) {
+  .filters { gap: 10px; }
+  .filters label, .filters select, .filters input { width: 100%; }
+  .brand h1 { font-size: 15px; }
+  .card b { font-size: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
